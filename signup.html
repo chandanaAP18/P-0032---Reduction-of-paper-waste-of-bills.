@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up | Smart Billing</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-card">
+    <h1>Sign Up</h1>
+    <p>Create your account to start managing invoices and payments.</p>
+    <form id="signup-form" class="form-card">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" placeholder="Jane Doe" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Create password" required>
+
+      <label for="confirm-password">Confirm Password</label>
+      <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm password" required>
+
+      <button type="submit" class="button primary">Sign Up</button>
+    </form>
+    <div class="form-footer">
+      <p>Already have an account? <a href="login.html">Log in</a></p>
+      <a class="text-link" href="index.html">Back to Home</a>
+    </div>
+  </div>
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      window.location.href = 'app.html';
+    });
+  </script>
+</body>
+</html>

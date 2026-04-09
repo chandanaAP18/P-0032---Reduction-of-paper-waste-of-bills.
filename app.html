@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Billing Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <img class="brand-logo" src="https://via.placeholder.com/72/2563eb/ffffff?text=SB" alt="Smart Billing Logo">
+        <div>
+          <p class="eyebrow">Smart Billing</p>
+          <h1>Billing Dashboard</h1>
+        </div>
+      </div>
+      <button id="logout-button" class="button secondary">Logout</button>
+    </header>
+
+    <nav class="app-nav" aria-label="Primary navigation">
+      <button class="nav-item active" data-section="dashboard">Dashboard</button>
+      <button class="nav-item" data-section="create-bills">Create Bills</button>
+      <button class="nav-item" data-section="mybills">My Bills</button>
+      <button class="nav-item" data-section="profile">Profile</button>
+    </nav>
+
+    <main class="app-main">
+      <section id="dashboard" class="app-section active">
+        <div class="dashboard-grid">
+          <div class="card">
+            <h2>Total Bills</h2>
+            <p id="bill-count">0</p>
+          </div>
+          <div class="card">
+            <h2>Paid Amount</h2>
+            <p id="paid-amount">$0</p>
+          </div>
+          <div class="card">
+            <h2>Pending Bills</h2>
+            <p id="pending-count">0</p>
+          </div>
+        </div>
+        <div class="card status-banner">
+          <p>Use the navigation above to create new bills, review your invoices, and update your profile.</p>
+        </div>
+      </section>
+
+      <section id="create-bills" class="app-section">
+        <div class="card">
+          <h2>Create a Bill</h2>
+          <p>Enter bill details to add a new invoice.</p>
+          <form id="bill-form" class="form-card">
+            <label for="customer-name">Customer Name</label>
+            <input type="text" id="customer-name" placeholder="Customer name" required>
+
+            <label for="bill-amount">Amount</label>
+            <input type="number" id="bill-amount" placeholder="Amount in USD" min="1" required>
+
+            <label for="due-date">Due Date</label>
+            <input type="date" id="due-date" required>
+
+            <label for="bill-status">Status</label>
+            <select id="bill-status" required>
+              <option value="Pending">Pending</option>
+              <option value="Paid">Paid</option>
+            </select>
+
+            <button type="submit" class="button primary">Create Bill</button>
+          </form>
+          <div id="bill-feedback" class="status-message" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section id="mybills" class="app-section">
+        <div class="card">
+          <h2>My Bills</h2>
+          <p>Review and manage the latest invoices.</p>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Bill ID</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Due Date</th>
+                </tr>
+              </thead>
+              <tbody id="bills-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="profile" class="app-section">
+        <div class="card profile-grid">
+          <div class="profile-item">
+            <h2>Account Details</h2>
+            <p><strong>Name:</strong> Smart Billing User</p>
+            <p><strong>Email:</strong> user@example.com</p>
+            <p><strong>Role:</strong> Billing Manager</p>
+          </div>
+          <div class="profile-item">
+            <h2>Quick Actions</h2>
+            <p>Update payment settings, manage team access, and keep your profile secure.</p>
+            <button class="button secondary" id="edit-profile">Edit Profile</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const bills = [
+      { id: 'INV-1021', customer: 'Acme Corp', amount: 1240, status: 'Paid', due: '2026-05-05' },
+      { id: 'INV-1022', customer: 'Green Labs', amount: 880, status: 'Pending', due: '2026-05-12' },
+      { id: 'INV-1023', customer: 'Nova Retail', amount: 430, status: 'Paid', due: '2026-04-28' }
+    ];
+
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.app-section');
+    const billCount = document.getElementById('bill-count');
+    const paidAmount = document.getElementById('paid-amount');
+    const pendingCount = document.getElementById('pending-count');
+    const billsTable = document.getElementById('bills-table');
+    const billForm = document.getElementById('bill-form');
+    const billFeedback = document.getElementById('bill-feedback');
+    const logoutButton = document.getElementById('logout-button');
+    const editProfileButton = document.getElementById('edit-profile');
+
+    function showSection(sectionId) {
+      navItems.forEach(item => item.classList.toggle('active', item.dataset.section === sectionId));
+      sections.forEach(section => section.classList.toggle('active', section.id === sectionId));
+    }
+
+    function renderBills() {
+      billsTable.innerHTML = bills.map(bill => `
+        <tr>
+          <td>${bill.id}</td>
+          <td>${bill.customer}</td>
+          <td>$${bill.amount.toFixed(2)}</td>
+          <td>${bill.status}</td>
+          <td>${bill.due}</td>
+        </tr>
+      `).join('');
+    }
+
+    function updateDashboard() {
+      billCount.textContent = bills.length;
+      paidAmount.textContent = '$' + bills.reduce((sum, bill) => sum + (bill.status === 'Paid' ? bill.amount : 0), 0).toFixed(2);
+      pendingCount.textContent = bills.filter(bill => bill.status === 'Pending').length;
+    }
+
+    function showBillMessage(text) {
+      billFeedback.textContent = text;
+      billFeedback.classList.add('status-message--visible');
+      setTimeout(() => billFeedback.classList.remove('status-message--visible'), 2400);
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => showSection(item.dataset.section));
+    });
+
+    billForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const customer = document.getElementById('customer-name').value.trim();
+      const amount = Number(document.getElementById('bill-amount').value);
+      const due = document.getElementById('due-date').value;
+      const status = document.getElementById('bill-status').value;
+      const newBill = {
+        id: `INV-${Math.floor(1000 + Math.random() * 9000)}`,
+        customer: customer || 'New Customer',
+        amount: amount || 0,
+        status,
+        due: due || 'TBD'
+      };
+      bills.unshift(newBill);
+      renderBills();
+      updateDashboard();
+      billForm.reset();
+      showSection('mybills');
+      showBillMessage('New bill created successfully.');
+    });
+
+    logoutButton.addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+
+    editProfileButton.addEventListener('click', () => {
+      alert('Profile editor is coming soon.');
+    });
+
+    renderBills();
+    updateDashboard();
+  </script>
+</body>
+</html>
