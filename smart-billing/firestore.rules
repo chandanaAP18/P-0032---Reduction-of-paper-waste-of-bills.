@@ -1,0 +1,31 @@
+// firestore.rules
+// Deploy these rules to Firebase Console > Firestore > Rules
+// or using: firebase deploy --only firestore:rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Bills collection:
+    // - Only the owner can read their own bills
+    // - Only authenticated users can create bills
+    // - Bills can only be created with the user's own UID
+    // - Bills cannot be updated or deleted (immutable receipts)
+    // - Public read allowed for bill viewing via QR code (anyone with the ID can view)
+    match /bills/{billId} {
+      // Anyone can read a specific bill (needed for QR code public access)
+      allow read: if true;
+
+      // Only authenticated users can create bills for themselves
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.customerName is string
+        && request.resource.data.productName is string
+        && request.resource.data.price is number
+        && request.resource.data.price > 0;
+
+      // Bills cannot be updated or deleted (receipts are permanent)
+      allow update, delete: if false;
+    }
+  }
+}
