@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Digital Billing System</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #0b1120;
+        color: #f8fafc;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at top, #1f2937 0%, #020617 65%);
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 20px 28px;
+        background: rgba(2, 6, 23, 0.88);
+        backdrop-filter: blur(18px);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.1rem;
+        font-weight: 800;
+      }
+
+      .brand::before {
+        content: "\25A1";
+        color: #22c55e;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .nav-links a {
+        color: #cbd5e1;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover,
+      .nav-links a:focus-visible {
+        color: #f8fafc;
+      }
+
+      main {
+        width: min(100%, 1120px);
+        margin: 0 auto;
+        padding: 48px 28px 80px;
+      }
+
+      .hero {
+        min-height: calc(100vh - 110px);
+        display: grid;
+        place-items: start;
+        gap: 26px;
+        padding-top: 24px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: rgba(34, 197, 94, 0.12);
+        color: #a7f3d0;
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.5rem, 4vw, 4.2rem);
+        line-height: 1.02;
+        max-width: 11ch;
+      }
+
+      p.lead {
+        max-width: 640px;
+        color: #cbd5e1;
+        font-size: 1.05rem;
+        line-height: 1.75;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .button,
+      .button-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 14px 24px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+      }
+
+      .button {
+        background: #22c55e;
+        color: #020617;
+      }
+
+      .button-secondary {
+        background: rgba(148, 163, 184, 0.14);
+        color: #e2e8f0;
+      }
+
+      .button:hover,
+      .button-secondary:hover {
+        transform: translateY(-1px);
+      }
+
+      .section-card {
+        padding: 36px;
+        border-radius: 28px;
+        background: rgba(15, 23, 42, 0.96);
+        border: 1px solid rgba(148, 163, 184, 0.08);
+        margin-top: 32px;
+      }
+
+      .section-card h2 {
+        margin-top: 0;
+        font-size: 1.7rem;
+      }
+
+      .section-card p {
+        color: #cbd5e1;
+        line-height: 1.8;
+      }
+
+      footer {
+        padding: 28px 0 14px;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 720px) {
+        .site-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .hero {
+          padding-top: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">Smart Billing</div>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#home">Home</a>
+        <a href="#create-bill">Create Bill</a>
+        <a href="#login">Login</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <span class="eyebrow">Smart Digital Billing System</span>
+        <div>
+          <h1>Build invoices faster with a smarter billing dashboard.</h1>
+          <p class="lead">Smart Billing makes it easy to create bills, manage clients, and access secure account pages from one polished landing experience.</p>
+          <div class="hero-actions">
+            <a class="button" href="#create-bill">Create Bill</a>
+            <a class="button-secondary" href="#login">Login</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="create-bill" class="section-card">
+        <h2>Create bill in seconds</h2>
+        <p>Use the billing system to generate invoices with client details, pricing, taxes, and payment terms quickly. This section serves as the entry point for the invoice creation workflow.</p>
+      </section>
+
+      <section id="login" class="section-card">
+        <h2>Login to your account</h2>
+        <p>Sign in securely to access your billing dashboard, view previous invoices, and manage your business workflows. Click the navigation link above to jump here at any time.</p>
+        <a class="button" href="#home">Return Home</a>
+      </section>
+    </main>
+
+    <footer>Smart Billing — your digital billing system for modern businesses.</footer>
+  </body>
+</html>
