@@ -183,3 +183,21 @@ function DashboardScreen({ userEmail, onLogout }) {
     </div>
   );
 }
+function generateReceipt() {
+  const data = {
+    customerName: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
+    address: document.getElementById("address").value,
+    items: [
+      {
+        name: document.getElementById("item1").value,
+        qty: document.getElementById("qty1").value,
+        price: document.getElementById("price1").value
+      }
+    ]
+  };
+
+  localStorage.setItem("receiptData", JSON.stringify(data));
+  window.location.href = "receipt.html";
+}
