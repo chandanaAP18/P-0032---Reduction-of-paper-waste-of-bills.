@@ -1,0 +1,62 @@
+<div style="text-align:center; margin-bottom:20px;">
+<svg width="220" height="80" viewBox="0 0 220 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14b8a6"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon -->
+  <g transform="translate(5,10)">
+    <!-- Document -->
+    <rect x="0" y="0" width="40" height="50" rx="6" fill="none" stroke="url(#grad)" stroke-width="2"/>
+    
+    <!-- Lines -->
+    <line x1="8" y1="15" x2="30" y2="15" stroke="url(#grad)" stroke-width="2"/>
+    <line x1="8" y1="22" x2="30" y2="22" stroke="url(#grad)" stroke-width="2"/>
+    <line x1="8" y1="29" x2="25" y2="29" stroke="url(#grad)" stroke-width="2"/>
+
+    <!-- Checkmark -->
+    <path d="M10 35 L18 42 L32 25" stroke="url(#grad)" stroke-width="3" fill="none"/>
+
+    <!-- Leaf -->
+    <path d="M35 0 Q45 10 35 20 Q30 15 35 10 Z" fill="url(#grad)"/>
+  </g>
+
+  <!-- Text -->
+  <text x="60" y="35" fill="#ffffff" font-size="18" font-weight="700" font-family="Inter, sans-serif">
+    Smart Billing
+  </text>
+
+  <text x="60" y="55" fill="#6ee7b7" font-size="12" letter-spacing="3" font-family="Inter, sans-serif">
+    SYSTEM
+  </text>
+</svg>
+</div>
+<link rel="stylesheet" href="login.css">
+
+<div class="login-container">
+  <div class="login-card">
+    <h2>Login</h2>
+
+    <div id="errorBox" class="error"></div>
+
+    <div class="login-group">
+      <input id="email" class="login-input" placeholder="Email">
+    </div>
+
+    <div class="login-group">
+      <input id="password" type="password" class="login-input" placeholder="Password">
+      <span class="toggle-password" onclick="togglePassword()">👁</span>
+    </div>
+
+    <button class="login-btn" onclick="login()">Login</button>
+
+    <div class="login-footer">
+      Smart Billing System
+    </div>
+  </div>
+</div>
+
+<script src="login.js"></script>
