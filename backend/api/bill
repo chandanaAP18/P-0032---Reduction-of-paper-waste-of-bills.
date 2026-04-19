@@ -1,0 +1,11 @@
+const twilio = require("twilio");
+
+const client = twilio("ACCOUNT_SID", "AUTH_TOKEN");
+
+async function sendWhatsApp(phone, link) {
+  await client.messages.create({
+    from: "whatsapp:+14155238886",
+    to: `whatsapp:+91${phone}`,
+    body: `Your bill is ready 🧾\n${link}`
+  });
+}
