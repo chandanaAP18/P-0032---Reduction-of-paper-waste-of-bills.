@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill View | Smart Billing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-600: #10b981;
+            --primary-500: #14b8a6;
+            --primary-400: #34d399;
+            --secondary-900: #0f172a;
+            --secondary-800: #1e293b;
+            --secondary-700: #334155;
+            --secondary-600: #475569;
+            --secondary-400: #cbd5e1;
+            --secondary-300: #e2e8f0;
+            --secondary-200: #f1f5f9;
+            --secondary-50: #f8fafc;
+            --success: #22c55e;
+            --error: #ef4444;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--secondary-50) 0%, var(--secondary-200) 100%);
+            color: var(--secondary-900);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .bill-header {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--secondary-200);
+        }
+
+        .company-info {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary-500);
+            padding-bottom: 1rem;
+        }
+
+        .company-name {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-600);
+            margin-bottom: 0.5rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .company-tagline {
+            color: var(--secondary-600);
+            font-size: 1rem;
+        }
+
+        .bill-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .bill-info, .customer-info {
+            background: var(--secondary-50);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--secondary-200);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary-800);
+            margin-bottom: 1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .info-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--secondary-700);
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .bill-items {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--secondary-200);
+            margin-bottom: 2rem;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .items-table th {
+            background: var(--secondary-800);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .items-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--secondary-200);
+            font-size: 0.95rem;
+        }
+
+        .items-table tbody tr:hover {
+            background: var(--secondary-50);
+        }
+
+        .bill-summary {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--secondary-200);
+            margin-bottom: 2rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--secondary-200);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            border-top: 2px solid var(--primary-500);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-600);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-500) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--secondary-700);
+            border: 1px solid var(--secondary-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-50);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .bill-details {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .company-name {
+                font-size: 1.5rem;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="bill-content">
+        <div class="bill-header">
+            <div class="company-info">
+                <h1 class="company-name">Smart Billing</h1>
+                <p class="company-tagline">Eco-friendly digital billing solutions</p>
+            </div>
+
+            <div class="bill-details">
+                <div class="bill-info">
+                    <h2 class="section-title">Bill Information</h2>
+                    <div class="info-item">
+                        <span class="info-label">Bill Number:</span>
+                        <span id="bill-number">SB-2024-001</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Date:</span>
+                        <span id="bill-date">April 19, 2024</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Due Date:</span>
+                        <span id="due-date">May 19, 2024</span>
+                    </div>
+                </div>
+
+                <div class="customer-info">
+                    <h2 class="section-title">Customer Details</h2>
+                    <div class="info-item">
+                        <span class="info-label">Name:</span>
+                        <span id="customer-name">John Doe</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Email:</span>
+                        <span id="customer-email">john.doe@example.com</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Phone:</span>
+                        <span id="customer-phone">+1 (555) 123-4567</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Address:</span>
+                        <span id="customer-address">123 Main St, City, State 12345</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bill-items">
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>GST Rate</th>
+                        <th>GST Amount</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="items-table-body">
+                    <tr>
+                        <td>Premium Service Package</td>
+                        <td>1</td>
+                        <td>₹2,500.00</td>
+                        <td>18%</td>
+                        <td>₹450.00</td>
+                        <td>₹2,950.00</td>
+                    </tr>
+                    <tr>
+                        <td>Additional Support</td>
+                        <td>2</td>
+                        <td>₹500.00</td>
+                        <td>18%</td>
+                        <td>₹180.00</td>
+                        <td>₹1,180.00</td>
+                    </tr>
+                    <tr>
+                        <td>Setup Fee</td>
+                        <td>1</td>
+                        <td>₹1,000.00</td>
+                        <td>18%</td>
+                        <td>₹180.00</td>
+                        <td>₹1,180.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bill-summary">
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">₹5,000.00</span>
+            </div>
+            <div class="summary-row">
+                <span>GST (18%):</span>
+                <span id="gst-amount">₹810.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Total Amount:</span>
+                <span id="total-amount">₹5,810.00</span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="downloadPDF()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14,2 14,8 20,8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10,9 9,9 8,9"></polyline>
+                </svg>
+                Download PDF
+            </button>
+            <a href="index.html" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        // Load bill data from localStorage or URL parameters
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBillData();
+        });
+
+        function loadBillData() {
+            // Try to get data from localStorage first
+            const billData = JSON.parse(localStorage.getItem('billData'));
+
+            if (billData) {
+                populateBillData(billData);
+            } else {
+                // If no data in localStorage, use sample data (for demo purposes)
+                console.log('No bill data found, using sample data');
+            }
+        }
+
+        function populateBillData(data) {
+            // Populate bill information
+            if (data.billNumber) document.getElementById('bill-number').textContent = data.billNumber;
+            if (data.date) document.getElementById('bill-date').textContent = data.date;
+            if (data.dueDate) document.getElementById('due-date').textContent = data.dueDate;
+
+            // Populate customer information
+            if (data.customer) {
+                document.getElementById('customer-name').textContent = data.customer.name || '';
+                document.getElementById('customer-email').textContent = data.customer.email || '';
+                document.getElementById('customer-phone').textContent = data.customer.phone || '';
+                document.getElementById('customer-address').textContent = data.customer.address || '';
+            }
+
+            // Populate items table
+            if (data.items && data.items.length > 0) {
+                const tbody = document.getElementById('items-table-body');
+                tbody.innerHTML = '';
+
+                let subtotal = 0;
+
+                data.items.forEach(item => {
+                    const gstAmount = (item.quantity * item.unitPrice * item.gstRate) / 100;
+                    const total = (item.quantity * item.unitPrice) + gstAmount;
+                    subtotal += item.quantity * item.unitPrice;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.description}</td>
+                        <td>${item.quantity}</td>
+                        <td>₹${item.unitPrice.toFixed(2)}</td>
+                        <td>${item.gstRate}%</td>
+                        <td>₹${gstAmount.toFixed(2)}</td>
+                        <td>₹${total.toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                // Update summary
+                const totalGST = subtotal * 0.18;
+                const totalAmount = subtotal + totalGST;
+
+                document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+                document.getElementById('gst-amount').textContent = `₹${totalGST.toFixed(2)}`;
+                document.getElementById('total-amount').textContent = `₹${totalAmount.toFixed(2)}`;
+            }
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('bill-content');
+            const opt = {
+                margin: 1,
+                filename: 'bill.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Show loading state
+            const btn = event.target.closest('.btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span>Generating PDF...</span>';
+            btn.disabled = true;
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Reset button
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error('PDF generation failed:', err);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert('Failed to generate PDF. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html>
