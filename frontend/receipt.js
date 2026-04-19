@@ -1,16 +1,24 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const data = JSON.parse(localStorage.getItem("receiptData"));
+const urlParams = new URLSearchParams(window.location.search);
+const billId = urlParams.get("id");
 
-  if (!data) return;
+async function loadReceipt() {
+  if (!billId) {
+    alert("No bill ID found!");
+    return;
+  }
 
-  // Customer details
+  const response = await fetch(`http://localhost:5000/bill/${billId}`);
+  const data = await response.json();
+
+  // ✅ Customer Details
   document.getElementById("customer-details").innerHTML = `
-    <strong>${data.customerName}</strong><br>
-    ${data.phone}<br>
-    ${data.email}
+    <strong>${data.customerName}</strong><br/>
+    ${data.phone}<br/>
+    ${data.email}<br/>
+    ${data.address}
   `;
 
-  // Table
+  // ✅ Items Table
   const tbody = document.querySelector("tbody");
   tbody.innerHTML = "";
 
@@ -20,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const amount = item.qty * item.price;
     subtotal += amount;
 
-    tbody.innerHTML += `
+    const row = `
       <tr>
         <td>${item.name}</td>
         <td>-</td>
@@ -30,23 +38,35 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>₹${amount}</td>
       </tr>
     `;
+
+    tbody.innerHTML += row;
   });
 
+  // ✅ GST Calculation
   const gst = subtotal * 0.18;
   const total = subtotal + gst;
 
-  document.querySelector("tfoot").innerHTML = `
+  // ✅ Update totals
+  const tfoot = document.querySelector("tfoot");
+
+  tfoot.innerHTML = `
     <tr>
       <td colspan="5">Subtotal</td>
       <td>₹${subtotal.toFixed(2)}</td>
     </tr>
     <tr>
-      <td colspan="5">GST 18%</td>
-      <td>₹${gst.toFixed(2)}</td>
+      <td colspan="5">CGST 9%</td>
+      <td>₹${(gst/2).toFixed(2)}</td>
     </tr>
     <tr>
-      <td colspan="5"><strong>Total</strong></td>
+      <td colspan="5">SGST 9%</td>
+      <td>₹${(gst/2).toFixed(2)}</td>
+    </tr>
+    <tr class="total">
+      <td colspan="5"><strong>Total Amount</strong></td>
       <td><strong>₹${total.toFixed(2)}</strong></td>
     </tr>
   `;
-});
+}
+
+loadReceipt();

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Bill</title>
+
+<style>
+:root {
+  --bg: #020617;
+  --card: rgba(15, 23, 42, 0.7);
+  --border: rgba(148, 163, 184, 0.15);
+  --accent: #10b981;
+  --accent2: #14b8a6;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+}
+
+/* ===== BACKGROUND ===== */
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: var(--text);
+}
+
+/* ===== WRAPPER ===== */
+.wrapper {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: var(--card);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+}
+
+/* ===== HEADER ===== */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.logo {
+  width: 45px;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* ===== SECTION ===== */
+.section {
+  margin-top: 30px;
+}
+
+.section h2 {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 12px;
+  letter-spacing: 0.08em;
+}
+
+/* ===== GRID ===== */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ===== INPUT ===== */
+.input {
+  display: flex;
+  flex-direction: column;
+}
+
+.input label {
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+
+input, textarea {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #020617;
+  color: white;
+  transition: 0.2s;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(16,185,129,0.2);
+}
+
+/* ===== ITEMS ===== */
+.item-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* ===== BUTTON ===== */
+.button {
+  width: 100%;
+  margin-top: 30px;
+  padding: 15px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: black;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== SUCCESS ===== */
+.success {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(16,185,129,0.15);
+  display: none;
+  text-align: center;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .item-row {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <div class="card">
+
+    <!-- HEADER -->
+    <div class="header">
+        <svg width="220" height="80" viewBox="0 0 220 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14b8a6"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon -->
+  <g transform="translate(5,10)">
+    <!-- Document -->
+    <rect x="0" y="0" width="40" height="50" rx="6" fill="none" stroke="url(#grad)" stroke-width="2"/>
+    
+    <!-- Lines -->
+    <line x1="8" y1="15" x2="30" y2="15" stroke="url(#grad)" stroke-width="2"/>
+    <line x1="8" y1="22" x2="30" y2="22" stroke="url(#grad)" stroke-width="2"/>
+    <line x1="8" y1="29" x2="25" y2="29" stroke="url(#grad)" stroke-width="2"/>
+
+    <!-- Checkmark -->
+    <path d="M10 35 L18 42 L32 25" stroke="url(#grad)" stroke-width="3" fill="none"/>
+
+    <!-- Leaf -->
+    <path d="M35 0 Q45 10 35 20 Q30 15 35 10 Z" fill="url(#grad)"/>
+  </g>
+
+  <!-- Text -->
+  <text x="60" y="35" fill="#ffffff" font-size="18" font-weight="700" font-family="Inter, sans-serif">
+    Smart Billing
+  </text>
+
+  <text x="60" y="55" fill="#6ee7b7" font-size="12" letter-spacing="3" font-family="Inter, sans-serif">
+    SYSTEM
+  </text>
+</svg>
+    </div>
+
+    <!-- CUSTOMER -->
+    <div class="section">
+      <h2>CUSTOMER DETAILS</h2>
+      <div class="grid">
+        <div class="input">
+          <label>Name</label>
+          <input id="name" placeholder="John Doe">
+        </div>
+        <div class="input">
+          <label>Phone</label>
+          <input id="phone" placeholder="9876543210">
+        </div>
+        <div class="input">
+          <label>Email</label>
+          <input id="email" placeholder="example@email.com">
+        </div>
+        <div class="input">
+          <label>GST (optional)</label>
+          <input id="gst" placeholder="29ABCDE1234F2Z5">
+        </div>
+      </div>
+    </div>
+
+    <!-- ADDRESS -->
+    <div class="section">
+      <h2>ADDRESS</h2>
+      <textarea id="address" placeholder="Enter full address"></textarea>
+    </div>
+
+    <!-- ITEMS -->
+    <div class="section">
+  <h2>ITEMS</h2>
+
+  <div id="items-container">
+    <div class="item-row">
+      <input placeholder="Item name" class="item-name">
+      <input type="number" placeholder="Qty" class="item-qty">
+      <input type="number" placeholder="Price" class="item-price">
+    </div>
+  </div>
+
+  <button onclick="addItem()" style="margin-top:10px;">+ Add Item</button>
+</div>
+    <!-- BUTTON -->
+    <button class="button" onclick="generateBill()">Generate Bill</button>
+
+    <div class="success" id="successMsg">✅ Bill Generated</div>
+
+  </div>
+
+</div>
+
+
+
+<script src="bill.js">  </script>
+
+</body>
+</html>
